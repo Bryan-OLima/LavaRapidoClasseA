@@ -1,9 +1,12 @@
 import WashCard from '../../components/WashCard/WashCard';
 import './style.css';
 import { MOCK_WASHES } from '../../mocks/washes';
+import { useState } from 'react';
 
 function HomePage() {
-  const washList = MOCK_WASHES.map((wash) => (
+  const [list, setList] = useState(MOCK_WASHES);
+
+  const washList = list.map((wash) => (
     <WashCard
       car={wash.car.model}
       plate={wash.car.plate}
@@ -13,6 +16,7 @@ function HomePage() {
       obs={`${wash.service.os}. ${wash.service.obs}`}
     />
   ));
+
   return (
     <section className="page-section">
       <input type="text" className="searchbar" placeholder="Buscar por Placa" />
@@ -22,13 +26,3 @@ function HomePage() {
 }
 
 export default HomePage;
-
-//wash recebe NOME DO CARRO, PLACA, ENTRADA, SAIDA, SERVIÇO, OBS, NOME DO CLIENTE, OS
-//  <WashCard
-//         car={wash.veiculo.modelo}
-//         plate={wash.veiculo.placa}
-//         client={wash.cliente.nome}
-//         entry={wash.timestamps.entrada}
-//         exit={wash.timestamps.saida}
-//         obs={`${wash.servico.os}. ${wash.servico.observacao}`}
-//       />
