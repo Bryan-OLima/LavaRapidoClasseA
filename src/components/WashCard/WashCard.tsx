@@ -10,7 +10,7 @@ interface WashCardProps {
   car: string;
   plate: string;
   client: string;
-  entry: string;
+  value: number;
   exit?: string;
   obs: string;
   onRemove: (id: string) => void;
@@ -21,7 +21,7 @@ function WashCard({
   car,
   plate,
   client,
-  entry,
+  value,
   exit,
   obs,
   onRemove,
@@ -37,7 +37,7 @@ function WashCard({
       <div className="card-schedule">
         <span className="card-text t-yellow">
           <WatchLaterIcon sx={{ fontSize: iconConfiguration.card.textIcon }} />{' '}
-          Entrada: {entry}
+          Valor: R$ {value},00
         </span>
         <span className="card-text">
           <WatchLaterIcon sx={{ fontSize: iconConfiguration.card.textIcon }} />{' '}

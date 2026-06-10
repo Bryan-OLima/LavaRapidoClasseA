@@ -12,9 +12,9 @@ export const MOCK_WASHES = [
       color: 'Prata',
     },
     service: {
-      type: 'Completa',
-      valor: 120.0,
-      status: 'pronto',
+      type: 'Completa', // retirar type
+      value: 120.0,
+      status: 'pronto', //  pronto, iniciado, em espera
       os: 'Cera líquida adicional, limpeza de estofado',
       obs: 'Sem avarias detectadas.',
     },
@@ -37,7 +37,7 @@ export const MOCK_WASHES = [
     },
     service: {
       type: 'Simples',
-      valor: 50.0,
+      value: 50.0,
       status: 'pronto',
       os: 'Lavagem básica + pretinho nos pneus',
       obs: 'Carro batido na porta esquerda e risco no para-choque traseiro.',
@@ -61,7 +61,7 @@ export const MOCK_WASHES = [
     },
     service: {
       type: 'Ducha',
-      valor: 35.0,
+      value: 35.0,
       status: 'pendente',
       os: 'Somente ducha externa rápida',
       obs: 'Vidro trincado no canto inferior direito.',
@@ -85,7 +85,7 @@ export const MOCK_WASHES = [
     },
     service: {
       type: 'Completa',
-      valor: 180.0,
+      value: 180.0,
       status: 'pendente',
       os: 'Cera cristalizadora e higienização de ar-condicionado',
       obs: 'Roda dianteira direita ralada.',
@@ -109,7 +109,7 @@ export const MOCK_WASHES = [
     },
     service: {
       type: 'Simples',
-      valor: 60.0,
+      value: 60.0,
       status: 'não-iniciado',
       os: 'Lavagem simples + aspiração interna profunda',
       obs: 'Sem avarias aparentes.',

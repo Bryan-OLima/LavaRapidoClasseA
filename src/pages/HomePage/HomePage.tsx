@@ -16,7 +16,7 @@ function HomePage() {
       car={wash.car.model}
       plate={wash.car.plate}
       client={wash.client.name}
-      entry={wash.timestamps.entry}
+      value={wash.service.value}
       exit={wash.timestamps.exit}
       obs={`${wash.service.os}. ${wash.service.obs}`}
       onRemove={handleRemoveWash}
