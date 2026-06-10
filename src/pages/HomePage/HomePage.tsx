@@ -5,15 +5,21 @@ import { useState } from 'react';
 
 function HomePage() {
   const [list, setList] = useState(MOCK_WASHES);
+  const handleRemoveWash = (id: string) => {
+    setList((p) => p.filter((wash) => wash.id !== id));
+  };
 
   const washList = list.map((wash) => (
     <WashCard
+      key={wash.id}
+      id={wash.id}
       car={wash.car.model}
       plate={wash.car.plate}
       client={wash.client.name}
       entry={wash.timestamps.entry}
       exit={wash.timestamps.exit}
       obs={`${wash.service.os}. ${wash.service.obs}`}
+      onRemove={handleRemoveWash}
     />
   ));
 

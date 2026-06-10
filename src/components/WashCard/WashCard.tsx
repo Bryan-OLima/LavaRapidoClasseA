@@ -6,15 +6,26 @@ import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import './style.css';
 
 interface WashCardProps {
+  id: string;
   car: string;
   plate: string;
   client: string;
   entry: string;
   exit?: string;
   obs: string;
+  onRemove: (id: string) => void;
 }
 
-function WashCard({ car, plate, client, entry, exit, obs }: WashCardProps) {
+function WashCard({
+  id,
+  car,
+  plate,
+  client,
+  entry,
+  exit,
+  obs,
+  onRemove,
+}: WashCardProps) {
   return (
     <div className="card">
       <div className="card-info">
@@ -41,7 +52,9 @@ function WashCard({ car, plate, client, entry, exit, obs }: WashCardProps) {
 
       <div className="card-btn-area">
         <button className="card-btn btn-edt">EDITAR</button>
-        <button className="card-btn btn-rmv">REMOVER</button>
+        <button className="card-btn btn-rmv" onClick={() => onRemove(id)}>
+          REMOVER
+        </button>
         <button className="card-btn btn-ok">
           <CheckCircleIcon sx={{ fontSize: iconConfiguration.card.fontSize }} />
           CONCLUIR
