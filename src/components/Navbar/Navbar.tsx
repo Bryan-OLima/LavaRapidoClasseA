@@ -1,0 +1,57 @@
+import { Link } from 'react-router-dom';
+import HomeIcon from '@mui/icons-material/Home';
+import EventIcon from '@mui/icons-material/Event';
+import PaidIcon from '@mui/icons-material/Paid';
+import iconConfiguration from '../../config/IconConfiguration';
+
+import './style.css';
+
+function Navbar() {
+  return (
+    <nav className="nav">
+      <li className="nav-link">
+        <Link to="/">
+          <button className="nav-link-btn btn">
+            <EventIcon
+              sx={{
+                color: iconConfiguration.navbar.color,
+                fontSize: iconConfiguration.navbar.fontSize,
+              }}
+            />
+            Agenda
+          </button>
+        </Link>
+      </li>
+
+      <li className="nav-link">
+        <Link to="/">
+          <button className="nav-link-btn btn active">
+            <HomeIcon
+              sx={{
+                color: iconConfiguration.navbar.active,
+                fontSize: iconConfiguration.navbar.fontSize,
+              }}
+            />
+            Home
+          </button>
+        </Link>
+      </li>
+
+      <li className="nav-link">
+        <Link to="/">
+          <button className="nav-link-btn btn">
+            <PaidIcon
+              sx={{
+                color: iconConfiguration.navbar.color,
+                fontSize: iconConfiguration.navbar.fontSize,
+              }}
+            />
+            Finanças
+          </button>
+        </Link>
+      </li>
+    </nav>
+  );
+}
+
+export default Navbar;

@@ -1,0 +1,30 @@
+/* MOBILE VERSION */
+@import '../../index.css';
+
+body {
+  background-color: var(--bg-app);
+}
+
+.page-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.searchbar {
+  width: 90vw;
+  height: 2.5rem;
+  margin: 0 0 1rem 0;
+  border-radius: 8px;
+  padding: 0 1rem;
+
+  font-size: 1rem;
+  font-weight: 400;
+
+  border: 1px solid var(--bg);
+  outline: 1px solid var(--bg);
+}
+
+input:focus {
+  outline: 2px solid var(--btn);
+}
