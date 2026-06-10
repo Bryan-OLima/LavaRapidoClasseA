@@ -12,7 +12,7 @@ interface WashCardProps {
   client: string;
   value: number;
   exit?: string;
-  obs: string;
+  notes: string;
   onRemove: (id: string) => void;
 }
 
@@ -23,7 +23,7 @@ function WashCard({
   client,
   value,
   exit,
-  obs,
+  notes,
   onRemove,
 }: WashCardProps) {
   return (
@@ -46,8 +46,8 @@ function WashCard({
       </div>
 
       <div className="card-obs card-text">
-        <EditIcon sx={{ fontSize: iconConfiguration.card.textIcon }} /> Obs: "
-        {obs}"
+        <EditIcon sx={{ fontSize: iconConfiguration.card.textIcon }} /> Notas: "
+        {notes}"
       </div>
 
       <div className="card-btn-area">

@@ -1,7 +1,9 @@
-import WashCard from '../../components/WashCard/WashCard';
-import './style.css';
-import { MOCK_WASHES } from '../../mocks/washes';
 import { useState } from 'react';
+
+import WashCard from '../../components/WashCard/WashCard';
+import { MOCK_WASHES } from '../../mocks/washes';
+
+import './style.css';
 
 function HomePage() {
   const [list, setList] = useState(MOCK_WASHES);
@@ -18,7 +20,7 @@ function HomePage() {
       client={wash.client.name}
       value={wash.service.value}
       exit={wash.timestamps.exit}
-      obs={`${wash.service.os}. ${wash.service.obs}`}
+      notes={`${wash.service.os}. ${wash.service.obs}`}
       onRemove={handleRemoveWash}
     />
   ));
