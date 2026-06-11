@@ -15,7 +15,6 @@ interface WashCardProps {
 
 function WashCard({ wash }: WashCardProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [date, setDate] = useState('');
 
   const setDataLog: any = () => {
     const date = new Date();

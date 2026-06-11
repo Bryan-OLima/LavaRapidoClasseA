@@ -6,7 +6,7 @@ import { MOCK_WASHES } from '../../mocks/washes';
 import './style.css';
 
 function HomePage() {
-  const [list, setList] = useState(MOCK_WASHES);
+  const list = MOCK_WASHES;
   const [search, setSearch] = useState('');
 
   const washSearch = list.filter((wash) => {
