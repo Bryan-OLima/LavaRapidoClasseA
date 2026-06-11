@@ -1,0 +1,6 @@
+@import '../../WashCard/style.css';
+
+.warn {
+  color: var(--red);
+  font-weight: 900;
+}

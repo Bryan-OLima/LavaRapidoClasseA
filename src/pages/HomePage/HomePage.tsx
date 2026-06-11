@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import WashCard from '../../components/WashCard/WashCard';
 import { MOCK_WASHES } from '../../mocks/washes';
@@ -8,23 +8,9 @@ import './style.css';
 function HomePage() {
   const [list, setList] = useState(MOCK_WASHES);
   const [search, setSearch] = useState('');
-  const handleRemoveWash = (id: string) => {
-    setList((p) => p.filter((wash) => wash.id !== id));
-  };
-
-  const washCardList = list.map((wash) => (
-    <WashCard
-      key={wash.id}
-      id={wash.id}
-      car={wash.car.model}
-      plate={wash.car.plate}
-      client={wash.client.name}
-      value={wash.service.value}
-      exit={wash.timestamps.exit}
-      notes={`${wash.service.os}. ${wash.service.obs}`}
-      onRemove={handleRemoveWash}
-    />
-  ));
+  // const handleRemoveWash = (id: string) => {
+  //   setList((p) => p.filter((wash) => wash.id !== id));
+  // };
 
   const washSearch = list.filter((wash) => {
     return wash.car.plate
@@ -40,7 +26,6 @@ function HomePage() {
         placeholder="Buscar por Placa"
         onChange={(e) => setSearch(e.target.value)}
       />
-      {/* {washCardList} */}
       {washSearch.map((wash) => (
         <WashCard
           key={wash.id}
@@ -51,7 +36,7 @@ function HomePage() {
           value={wash.service.value}
           exit={wash.timestamps.exit}
           notes={`${wash.service.os}. ${wash.service.obs}`}
-          onRemove={handleRemoveWash}
+          // onRemove={handleRemoveWash}
         />
       ))}
     </section>

@@ -4,6 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 
 import './style.css';
+import CustomDialog from '../Dialogs/CustomDialog/CustomDialog';
 
 interface WashCardProps {
   id: string;
@@ -13,7 +14,6 @@ interface WashCardProps {
   value: number;
   exit?: string;
   notes: string;
-  onRemove: (id: string) => void;
 }
 
 function WashCard({
@@ -24,7 +24,6 @@ function WashCard({
   value,
   exit,
   notes,
-  onRemove,
 }: WashCardProps) {
   return (
     <div className="card">
@@ -52,9 +51,7 @@ function WashCard({
 
       <div className="card-btn-area">
         <button className="card-btn btn-edt">EDITAR</button>
-        <button className="card-btn btn-rmv" onClick={() => onRemove(id)}>
-          REMOVER
-        </button>
+        <CustomDialog id={id} carModel={car} clientName={client} />
         <button className="card-btn btn-ok">
           <CheckCircleIcon sx={{ fontSize: iconConfiguration.card.fontSize }} />
           CONCLUIR
