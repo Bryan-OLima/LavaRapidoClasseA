@@ -9,7 +9,12 @@ function Header() {
         <span className="main-logo__text">CLASSEA</span>
       </div>
       <div className="main-checkin">
-        <button className="main-checkin-button">
+        <button
+          className="main-checkin-button"
+          onClick={() => {
+            console.log('Botão clickado:  criar novo checkin');
+          }}
+        >
           <span className="main-checkin-button__cross"> + </span>
         </button>
         <div className="main-checkin-button__text">Novo</div>

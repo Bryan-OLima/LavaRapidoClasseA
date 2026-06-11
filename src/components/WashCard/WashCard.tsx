@@ -4,7 +4,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 
 import './style.css';
-import CustomDialog from '../Dialogs/CustomDialog/CustomDialog';
+import { useState } from 'react';
+import ConfirmationDialog from '../Dialogs/ConfirmationDialog/ConfirmationDialog';
 
 interface WashCardProps {
   id: string;
@@ -25,6 +26,12 @@ function WashCard({
   exit,
   notes,
 }: WashCardProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const handleIsOpen = () => {
+    setIsOpen(!isOpen);
+    console.log(`handleIsOpen ativado? ${!isOpen}`);
+  };
+
   return (
     <div className="card">
       <div className="card-info">
@@ -51,7 +58,30 @@ function WashCard({
 
       <div className="card-btn-area">
         <button className="card-btn btn-edt">EDITAR</button>
-        <CustomDialog id={id} carModel={car} clientName={client} />
+        <button
+          className="card-btn btn-rmv"
+          onClick={() => {
+            handleIsOpen();
+          }}
+        >
+          REMOVER
+        </button>
+        <ConfirmationDialog
+          id={id}
+          HtmlCodeBlock={
+            <>
+              Você tem certeza que quer remover a lavagem do carro{' '}
+              <span className="warn">{car}</span> do cliente{' '}
+              <span className="warn">{client}</span>?
+            </>
+          }
+          handleIsOpen={handleIsOpen}
+          isStateOpen={isOpen}
+          buttons={{
+            confirmationButton: { color: '#e2361f', name: 'REMOVER' },
+            secundaryButton: { color: '#fff', name: 'CANCELAR' },
+          }}
+        />
         <button className="card-btn btn-ok">
           <CheckCircleIcon sx={{ fontSize: iconConfiguration.card.fontSize }} />
           CONCLUIR
