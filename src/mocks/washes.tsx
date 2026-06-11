@@ -21,6 +21,8 @@ export const MOCK_WASHES = [
     timestamps: {
       entry: '2026-05-14T08:00:00Z',
       exit: '2026-05-14T09:00:00Z',
+      hour: '',
+      data: '',
     },
   },
   {
@@ -45,6 +47,8 @@ export const MOCK_WASHES = [
     timestamps: {
       entry: '2026-05-14T08:30:00Z',
       exit: '2026-05-14T09:45:00Z',
+      hour: '',
+      data: '',
     },
   },
   {
@@ -69,6 +73,8 @@ export const MOCK_WASHES = [
     timestamps: {
       entry: '2026-05-14T09:00:00Z',
       exit: '2026-05-14T10:30:00Z',
+      hour: '',
+      data: '',
     },
   },
   {
@@ -93,6 +99,8 @@ export const MOCK_WASHES = [
     timestamps: {
       entry: '2026-05-14T09:15:00Z',
       exit: '2026-05-14T11:00:00Z',
+      hour: '',
+      data: '',
     },
   },
   {
@@ -117,6 +125,8 @@ export const MOCK_WASHES = [
     timestamps: {
       entry: '2026-05-14T10:00:00Z',
       exit: '2026-05-14T12:00:00Z',
+      hour: '',
+      data: '',
     },
   },
 ];

@@ -7,29 +7,22 @@ import './style.css';
 import { useState } from 'react';
 import ConfirmationDialog from '../Dialogs/ConfirmationDialog/ConfirmationDialog';
 import type { Wash } from '../../interfaces/Washes';
+import { DateFormater } from '../../utils/dateFormater';
 
 interface WashCardProps {
-  id: string;
-  car: string;
-  plate: string;
-  client: string;
-  value: number;
-  exit?: string;
-  notes: string;
-
   wash: Wash;
 }
 
-function WashCard({
-  id,
-  car,
-  plate,
-  client,
-  value,
-  exit,
-  notes,
-}: WashCardProps) {
+function WashCard({ wash }: WashCardProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [date, setDate] = useState('');
+
+  const setDataLog: any = () => {
+    const date = new Date();
+    wash.timestamps.hour = DateFormater(date);
+    wash.timestamps.data = new Date().toLocaleDateString();
+  };
+
   const handleIsOpen = () => {
     setIsOpen(!isOpen);
   };
@@ -37,25 +30,25 @@ function WashCard({
   return (
     <div className="card">
       <div className="card-info">
-        <span className="card-title">{car}</span>
-        <span className="card-plate"> {plate} </span>
+        <span className="card-title">{wash.car.model}</span>
+        <span className="card-plate"> {wash.car.plate} </span>
       </div>
 
-      <span className="card-name">{client}</span>
+      <span className="card-name">{wash.client.name}</span>
       <div className="card-schedule">
         <span className="card-text t-yellow">
           <WatchLaterIcon sx={{ fontSize: iconConfiguration.card.textIcon }} />{' '}
-          Valor: R$ {value},00
+          Valor: R$ {wash.service.value},00
         </span>
         <span className="card-text">
           <WatchLaterIcon sx={{ fontSize: iconConfiguration.card.textIcon }} />{' '}
-          Saída: {exit}
+          Saída: {wash.timestamps.exit}
         </span>
       </div>
 
       <div className="card-obs card-text">
         <EditIcon sx={{ fontSize: iconConfiguration.card.textIcon }} /> Notas: "
-        {notes}"
+        {`${wash.service.os}. ${wash.service.obs}`}"
       </div>
 
       <div className="card-btn-area">
@@ -69,12 +62,12 @@ function WashCard({
           REMOVER
         </button>
         <ConfirmationDialog
-          id={id}
+          id={wash.id}
           HtmlCodeBlock={
             <>
               Você tem certeza que quer remover a lavagem do carro{' '}
-              <span className="warn">{car}</span> do cliente{' '}
-              <span className="warn">{client}</span>?
+              <span className="warn">{wash.car.model}</span> do cliente{' '}
+              <span className="warn">{wash.client.name}</span>?
             </>
           }
           handleIsOpen={handleIsOpen}
@@ -84,7 +77,14 @@ function WashCard({
             secundaryButton: { color: '#fff', name: 'CANCELAR' },
           }}
         />
-        <button className="card-btn btn-ok">
+        <button
+          className="card-btn btn-ok"
+          onClick={() => {
+            setDataLog();
+            console.log(wash.timestamps.hour);
+            console.log(wash.timestamps.data);
+          }}
+        >
           <CheckCircleIcon sx={{ fontSize: iconConfiguration.card.fontSize }} />
           CONCLUIR
         </button>

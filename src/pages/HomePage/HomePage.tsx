@@ -24,16 +24,7 @@ function HomePage() {
         onChange={(e) => setSearch(e.target.value)}
       />
       {washSearch.map((wash) => (
-        <WashCard
-          key={wash.id}
-          id={wash.id}
-          car={wash.car.model}
-          plate={wash.car.plate}
-          client={wash.client.name}
-          value={wash.service.value}
-          exit={wash.timestamps.exit}
-          notes={`${wash.service.os}. ${wash.service.obs}`}
-        />
+        <WashCard key={wash.id} wash={wash} />
       ))}
     </section>
   );
