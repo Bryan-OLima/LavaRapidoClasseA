@@ -19,8 +19,8 @@ export const MOCK_WASHES = [
       obs: 'Sem avarias detectadas.',
     },
     timestamps: {
-      entry: '2026-05-14T08:00:00Z',
-      exit: '2026-05-14T09:00:00Z',
+      entry: '08:00:00',
+      exit: '09:00:00',
       hour: '',
       data: '',
     },
@@ -45,8 +45,8 @@ export const MOCK_WASHES = [
       obs: 'Carro batido na porta esquerda e risco no para-choque traseiro.',
     },
     timestamps: {
-      entry: '2026-05-14T08:30:00Z',
-      exit: '2026-05-14T09:45:00Z',
+      entry: '08:30:00',
+      exit: '09:45:00',
       hour: '',
       data: '',
     },
@@ -71,7 +71,7 @@ export const MOCK_WASHES = [
       obs: 'Vidro trincado no canto inferior direito.',
     },
     timestamps: {
-      entry: '2026-05-14T09:00:00Z',
+      entry: '09:00:00',
       exit: '2026-05-14T10:30:00Z',
       hour: '',
       data: '',
