@@ -46,7 +46,7 @@ function ConfirmationDialog({
             className="card-btn"
             style={{ color: buttons.confirmationButton.color, border: 'none' }}
             onClick={() => {
-              console.log(`${id} excluído com sucesso!`);
+              console.log(`MENSAGEM TEST: ${id} excluído com sucesso!`);
               handleIsOpen(false);
             }}
           >
@@ -55,7 +55,7 @@ function ConfirmationDialog({
           <button
             className="card-btn"
             style={{ width: '50%', border: 'none' }}
-            onClick={() => handleIsOpen}
+            onClick={() => handleIsOpen(false)}
             autoFocus
           >
             {buttons.secundaryButton?.name}

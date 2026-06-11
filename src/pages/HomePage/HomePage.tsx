@@ -8,9 +8,6 @@ import './style.css';
 function HomePage() {
   const [list, setList] = useState(MOCK_WASHES);
   const [search, setSearch] = useState('');
-  // const handleRemoveWash = (id: string) => {
-  //   setList((p) => p.filter((wash) => wash.id !== id));
-  // };
 
   const washSearch = list.filter((wash) => {
     return wash.car.plate
@@ -36,7 +33,6 @@ function HomePage() {
           value={wash.service.value}
           exit={wash.timestamps.exit}
           notes={`${wash.service.os}. ${wash.service.obs}`}
-          // onRemove={handleRemoveWash}
         />
       ))}
     </section>

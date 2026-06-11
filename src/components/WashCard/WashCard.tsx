@@ -6,6 +6,7 @@ import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import './style.css';
 import { useState } from 'react';
 import ConfirmationDialog from '../Dialogs/ConfirmationDialog/ConfirmationDialog';
+import type { Wash } from '../../interfaces/Washes';
 
 interface WashCardProps {
   id: string;
@@ -15,6 +16,8 @@ interface WashCardProps {
   value: number;
   exit?: string;
   notes: string;
+
+  wash: Wash;
 }
 
 function WashCard({
@@ -29,7 +32,6 @@ function WashCard({
   const [isOpen, setIsOpen] = useState(false);
   const handleIsOpen = () => {
     setIsOpen(!isOpen);
-    console.log(`handleIsOpen ativado? ${!isOpen}`);
   };
 
   return (
