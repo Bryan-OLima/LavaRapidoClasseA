@@ -12,9 +12,9 @@ export const MOCK_WASHES = [
       color: 'Prata',
     },
     service: {
-      type: 'Completa', // retirar type
+      type: 'Completa',
       value: 120.0,
-      status: 'pronto', //  pronto, iniciado, em espera
+      status: 'pronto',
       os: 'Cera líquida adicional, limpeza de estofado',
       obs: 'Sem avarias detectadas.',
     },
