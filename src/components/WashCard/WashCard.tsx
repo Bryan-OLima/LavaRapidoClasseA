@@ -2,6 +2,7 @@ import iconConfiguration from '../../config/IconConfiguration';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 
 import './style.css';
 import { useState } from 'react';
@@ -31,21 +32,49 @@ function WashCard({ wash }: WashCardProps) {
       </div>
 
       <span className="card-name">{wash.client.name}</span>
+
+      {isDelivered && <span className="card-name">{wash.client.phone}</span>}
+
       <div className="card-schedule">
-        <span className="card-text t-yellow">
-          <WatchLaterIcon sx={{ fontSize: iconConfiguration.card.textIcon }} />{' '}
+        <span className="card-text">
+          <MonetizationOnIcon
+            sx={{ fontSize: iconConfiguration.card.textIcon }}
+          />{' '}
           Valor: R$ {wash.service.value},00
         </span>
-        <span className="card-text">
-          <WatchLaterIcon sx={{ fontSize: iconConfiguration.card.textIcon }} />{' '}
+        {isDelivered && (
+          <span className="card-text">
+            <WatchLaterIcon
+              sx={{ fontSize: iconConfiguration.card.textIcon }}
+            />{' '}
+            Entrada: {wash.timestamps.entry}
+          </span>
+        )}
+        <span
+          className="card-text "
+          style={{ color: !isDelivered ? '#f9d406' : '#fff' }}
+        >
+          <WatchLaterIcon
+            sx={{ fontSize: iconConfiguration.card.textIcon }}
+            style={{ color: !isDelivered ? '#f9d406' : '#fff' }}
+          />{' '}
           Saída: {wash.timestamps.exit}
         </span>
+        {isDelivered && (
+          <span className="card-text t-yellow">
+            <WatchLaterIcon
+              sx={{ fontSize: iconConfiguration.card.textIcon }}
+            />{' '}
+            Data: {wash.timestamps.data}
+          </span>
+        )}
       </div>
 
       <div className="card-obs card-text">
         <EditIcon sx={{ fontSize: iconConfiguration.card.textIcon }} /> Notas: "
         {`${wash.service.os}. ${wash.service.obs}`}"
       </div>
+
       {!isDelivered && (
         <div className="card-btn-area">
           <button className="card-btn btn-edt">EDITAR</button>
