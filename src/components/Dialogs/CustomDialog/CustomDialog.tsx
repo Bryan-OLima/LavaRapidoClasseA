@@ -9,6 +9,7 @@ interface CustomDialogProps {
   HtmlCodeBlock?: React.ReactNode;
   buttons: {
     confirmationButton: Button;
+    actions?: any;
     secundaryButton?: Button;
   };
   isStateOpen: boolean;

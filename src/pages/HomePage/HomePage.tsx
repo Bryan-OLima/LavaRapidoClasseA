@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import WashCard from '../../components/WashCard/WashCard';
-import { MOCK_WASHES } from '../../mocks/washes';
+// import { MOCK_WASHES } from '../../mocks/washes';
 
 import './style.css';
 import type { Wash } from '../../interfaces/Washes';
@@ -9,7 +9,7 @@ import type { Wash } from '../../interfaces/Washes';
 import WashService from '../../services/WashService';
 
 function HomePage() {
-  const list = MOCK_WASHES;
+  // const list = MOCK_WASHES;
   const [search, setSearch] = useState('');
   const [wash, setWash] = useState<Wash[]>([]);
 
@@ -21,9 +21,9 @@ function HomePage() {
       const washesArray = Object.values(washData) as Wash[];
       setWash(washesArray);
     }
-  }, []);
+  }, [wash]);
 
-  const washSearch = list.filter((wash: any) => {
+  const washSearch = wash.filter((wash: any) => {
     return wash.car.plate
       .toLocaleLowerCase()
       .includes(search.toLocaleLowerCase());

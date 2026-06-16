@@ -4,6 +4,7 @@ export default function WashService() {
   console.log('local storage service');
   return {
     set: (wash: Wash) => {
+      wash.id = `WASH_${crypto.randomUUID()}`;
       localStorage.setItem(wash.id, JSON.stringify(wash));
       console.log(wash.timestamps.hour);
       console.log(wash.timestamps.data);
@@ -32,7 +33,7 @@ export default function WashService() {
 
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
-        if (key?.startsWith('Wash_')) {
+        if (key?.startsWith('WASH_')) {
           const value = localStorage.getItem(key);
 
           if (!value) return null;

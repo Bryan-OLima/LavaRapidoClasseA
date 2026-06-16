@@ -1,15 +1,12 @@
-import * as React from 'react';
-
 //MUI IMPORTS
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import type { Wash } from '../../../interfaces/Washes'; // Sua interface
@@ -21,6 +18,33 @@ interface FormsDialogProps {
   isOpenState: boolean;
   initialData?: Wash;
 }
+
+const defaultWash = {
+  client: {
+    name: '',
+    phone: '',
+    address: '',
+  },
+  car: {
+    model: '',
+    plate: '',
+    color: '',
+  },
+  service: {
+    type: '',
+    value: 0,
+    status: '',
+    os: '',
+    obs: '',
+  },
+  timestamps: {
+    entry: '',
+    exit: '',
+    hour: '',
+    data: '',
+  },
+  id: '',
+};
 
 const washSchema = z.object({
   id: z.string(),
@@ -39,16 +63,16 @@ const washSchema = z.object({
 
   service: z.object({
     type: z.string().min(1, 'Selecione um tipo'),
-    value: z.number().positive(),
+    value: z.coerce.number({ error: 'deve ser um numero' }).positive(),
     status: z.string(),
     os: z.string(),
     obs: z.string(),
   }),
   timestamps: z.object({
-    entry: z.string(),
+    entry: z.string().optional(),
     exit: z.string().min(4),
-    hour: z.string(),
-    data: z.string(),
+    hour: z.string().optional(),
+    data: z.string().optional(),
   }),
 });
 
@@ -67,23 +91,33 @@ export default function FormsDialog({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<WashFormData>({
-    resolver: zodResolver(washSchema),
-    defaultValues: initialData, // Se existir, preenche os campos automaticamente!
+    resolver: zodResolver(washSchema) as any,
+    defaultValues: initialData || defaultWash, // Se existir, preenche os campos automaticamente!
   });
 
   const onSubmit = async (data: WashFormData) => {
+    const clearData = () => {
+      initialData = defaultWash;
+    };
+
     try {
       if (initialData?.id) {
-        await washService.set(data);
+        console.log('clicked and updated');
+        await washService.update(data);
+        clearData();
       } else {
         const date = new Date();
-        data.id = crypto.randomUUID();
+        data.service.value = Number(data.service.value);
         data.timestamps.hour = DateFormater(date);
         data.timestamps.data = new Date().toLocaleDateString();
         data.timestamps.entry = new Date().toLocaleDateString();
 
+        console.log('clicked in create new ones');
+
+        clearData();
         await washService.set(data);
       }
       handleClick();
@@ -94,117 +128,246 @@ export default function FormsDialog({
 
   return (
     <>
-      <Button variant="outlined" onClick={handleClick}>
-        Open form dialog
-      </Button>
       <Dialog open={isOpenState} onClose={handleClick}>
-        <DialogTitle>Subscribe</DialogTitle>
+        <DialogTitle>Lavagem</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here.
-            We will send updates occasionally.
-          </DialogContentText>
-          <form onSubmit={handleClick} id="subscription-form">
-            <input {...register('client.name')} placeholder="Nome do Cliente" />
-            {errors.client?.name && <p>{errors.client.name.message}</p>}
-
-            <input
-              {...register('client.phone')}
-              placeholder="Tipo de Lavagem"
+          <form onSubmit={handleSubmit(onSubmit)} id="subscription-form">
+            <Controller
+              name="client.name"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Nome do Cliente"
+                  error={!!errors.client?.name}
+                  helperText={errors.client?.name?.message}
+                  fullWidth
+                  autoFocus
+                  required
+                  margin="dense"
+                  type="text"
+                  variant="standard"
+                />
+              )}
             />
-            {errors.client?.phone && <p>{errors.client.phone.message}</p>}
 
-            <input
-              {...register('client.address')}
-              placeholder="Tipo de Lavagem"
+            <Controller
+              name="client.phone"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Telefone"
+                  error={!!errors.client?.phone}
+                  helperText={errors.client?.phone?.message}
+                  fullWidth
+                  autoFocus
+                  required
+                  margin="dense"
+                  type="text"
+                  variant="standard"
+                />
+              )}
             />
-            {errors.client?.address && <p>{errors.client.address.message}</p>}
 
-            <input {...register('car.model')} placeholder="Tipo de Lavagem" />
-            {errors.car?.model && <p>{errors.car.model.message}</p>}
-
-            <input {...register('car.plate')} placeholder="Tipo de Lavagem" />
-            {errors.car?.plate && <p>{errors.car.plate.message}</p>}
-
-            <input {...register('car.color')} placeholder="Tipo de Lavagem" />
-            {errors.car?.color && <p>{errors.car.color.message}</p>}
-
-            <input
-              {...register('service.type')}
-              placeholder="Tipo de Lavagem"
+            <Controller
+              name="client.address"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Endereço"
+                  error={!!errors.client?.address}
+                  helperText={errors.client?.address?.message}
+                  fullWidth
+                  autoFocus
+                  required
+                  margin="dense"
+                  type="text"
+                  variant="standard"
+                />
+              )}
             />
-            {errors.service?.type && <p>{errors.service.type.message}</p>}
 
-            <input
-              {...register('service.value')}
-              placeholder="Tipo de Lavagem"
+            <Controller
+              name="car.model"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Carro"
+                  error={!!errors.car?.model}
+                  helperText={errors.car?.model?.message}
+                  fullWidth
+                  autoFocus
+                  required
+                  margin="dense"
+                  type="text"
+                  variant="standard"
+                />
+              )}
             />
-            {errors.service?.value && <p>{errors.service.value.message}</p>}
 
-            <input
-              {...register('service.status')}
-              placeholder="Tipo de Lavagem"
+            <Controller
+              name="car.plate"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Placa"
+                  error={!!errors.car?.plate}
+                  helperText={errors.car?.plate?.message}
+                  fullWidth
+                  autoFocus
+                  required
+                  margin="dense"
+                  type="text"
+                  variant="standard"
+                />
+              )}
             />
-            {errors.service?.status && <p>{errors.service.status.message}</p>}
 
-            <input {...register('service.os')} placeholder="Tipo de Lavagem" />
-            {errors.service?.os && <p>{errors.service.os.message}</p>}
-
-            <input {...register('service.obs')} placeholder="Tipo de Lavagem" />
-            {errors.service?.obs && <p>{errors.service.obs.message}</p>}
-
-            <input
-              {...register('timestamps.exit')}
-              placeholder="Tipo de Lavagem"
+            <Controller
+              name="car.color"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Cor"
+                  error={!!errors.car?.color}
+                  helperText={errors.car?.color?.message}
+                  fullWidth
+                  autoFocus
+                  required
+                  margin="dense"
+                  type="text"
+                  variant="standard"
+                />
+              )}
             />
-            {errors.timestamps?.exit && <p>{errors.timestamps.exit.message}</p>}
 
-            <button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Salvando...' : 'Salvar'}
-            </button>
+            <Controller
+              name="service.type"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Tipo"
+                  error={!!errors.service?.type}
+                  helperText={errors.service?.type?.message}
+                  fullWidth
+                  autoFocus
+                  required
+                  margin="dense"
+                  type="text"
+                  variant="standard"
+                />
+              )}
+            />
+
+            <Controller
+              name="service.value"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Valor"
+                  error={!!errors.service?.value}
+                  helperText={errors.service?.value?.message}
+                  fullWidth
+                  autoFocus
+                  required
+                  margin="dense"
+                  type="number"
+                  variant="standard"
+                />
+              )}
+            />
+
+            <Controller
+              name="service.status"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Status"
+                  error={!!errors.service?.status}
+                  helperText={errors.service?.status?.message}
+                  fullWidth
+                  autoFocus
+                  required
+                  margin="dense"
+                  type="text"
+                  variant="standard"
+                />
+              )}
+            />
+
+            <Controller
+              name="service.os"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="OS"
+                  error={!!errors.service?.os}
+                  helperText={errors.service?.os?.message}
+                  fullWidth
+                  autoFocus
+                  required
+                  margin="dense"
+                  type="text"
+                  variant="standard"
+                />
+              )}
+            />
+
+            <Controller
+              name="service.obs"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="OBS"
+                  error={!!errors.service?.obs}
+                  helperText={errors.service?.obs?.message}
+                  fullWidth
+                  autoFocus
+                  required
+                  margin="dense"
+                  type="text"
+                  variant="standard"
+                />
+              )}
+            />
+
+            <Controller
+              name="timestamps.exit"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Saída"
+                  error={!!errors.timestamps?.exit}
+                  helperText={errors.timestamps?.exit?.message}
+                  fullWidth
+                  autoFocus
+                  required
+                  margin="dense"
+                  type="text"
+                  variant="standard"
+                />
+              )}
+            />
+            <DialogActions>
+              <Button onClick={handleClick}>Cancel</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Salvando...' : 'Salvar'}
+              </Button>
+            </DialogActions>
           </form>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClick}>Cancel</Button>
-          <Button type="submit" form="subscription-form">
-            Subscribe
-          </Button>
-        </DialogActions>
       </Dialog>
     </>
   );
 }
-
-//  <TextField
-//               autoFocus
-//               required
-//               margin="dense"
-//               id="name"
-//               name="name"
-//               label="Nome"
-//               type="text"
-//               fullWidth
-//               variant="standard"
-//             />
-//             <TextField
-//               autoFocus
-//               required
-//               margin="dense"
-//               id="car"
-//               name="car"
-//               label="Carro"
-//               type="text"
-//               fullWidth
-//               variant="standard"
-//             />
-//             <TextField
-//               autoFocus
-//               required
-//               margin="dense"
-//               id="name"
-//               name="email"
-//               label="Email Address"
-//               type="text"
-//               fullWidth
-//               variant="standard"
-//             />
