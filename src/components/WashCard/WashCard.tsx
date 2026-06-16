@@ -7,17 +7,13 @@ import './style.css';
 import { useState } from 'react';
 import CustomDialog from '../Dialogs/CustomDialog/CustomDialog';
 import type { Wash } from '../../interfaces/Washes';
-import { DateFormater } from '../../utils/dateFormater';
-import WashService from '../../services/WashService';
 
 interface WashCardProps {
   wash: Wash;
-  service: any;
 }
 
-function WashCard({ wash, service }: WashCardProps) {
+function WashCard({ wash }: WashCardProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const washService = WashService();
   const handleIsOpen = () => {
     setIsOpen(!isOpen);
   };
@@ -69,7 +65,6 @@ function WashCard({ wash, service }: WashCardProps) {
           isStateOpen={isOpen}
           buttons={{
             confirmationButton: { color: '#e2361f', name: 'REMOVER' },
-            // actions: washService.delete(wash.id),
             secundaryButton: { color: '#fff', name: 'CANCELAR' },
           }}
         />

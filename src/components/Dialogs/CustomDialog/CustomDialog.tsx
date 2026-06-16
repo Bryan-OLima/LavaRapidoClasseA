@@ -3,13 +3,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
 import './style.css';
-
+import { WashService } from '../../../services/WashService';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 interface CustomDialogProps {
-  id?: string;
+  id: string;
   HtmlCodeBlock?: React.ReactNode;
   buttons: {
     confirmationButton: Button;
-    actions?: any;
     secundaryButton?: Button;
   };
   isStateOpen: boolean;
@@ -28,6 +28,15 @@ function CustomDialog({
   isStateOpen,
   handleIsOpen,
 }: CustomDialogProps) {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (id: string) => WashService.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['washes'] });
+      handleIsOpen(!isStateOpen);
+    },
+  });
+
   return (
     <>
       <Dialog
@@ -47,8 +56,7 @@ function CustomDialog({
             className="card-btn"
             style={{ color: buttons.confirmationButton.color, border: 'none' }}
             onClick={() => {
-              console.log(`MENSAGEM TEST: ${id} excluído com sucesso!`);
-              handleIsOpen(false);
+              mutation.mutate(id);
             }}
           >
             {buttons.confirmationButton.name}
@@ -56,7 +64,9 @@ function CustomDialog({
           <button
             className="card-btn"
             style={{ width: '50%', border: 'none' }}
-            onClick={() => handleIsOpen(false)}
+            onClick={() => {
+              handleIsOpen(!isStateOpen);
+            }}
             autoFocus
           >
             {buttons.secundaryButton?.name}

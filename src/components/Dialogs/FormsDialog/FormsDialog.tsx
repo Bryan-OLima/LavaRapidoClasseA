@@ -9,9 +9,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import type { Wash } from '../../../interfaces/Washes'; // Sua interface
-import WashService from '../../../services/WashService';
-import { DateFormater } from '../../../utils/dateFormater';
+import type { Wash } from '../../../interfaces/Washes';
+import { WashService } from '../../../services/WashService';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 interface FormsDialogProps {
   handleIsOpen: (isOpen: boolean) => void;
@@ -70,13 +71,13 @@ const washSchema = z.object({
   }),
   timestamps: z.object({
     entry: z.string().optional(),
-    exit: z.string().min(4),
+    exit: z
+      .string()
+      .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'O formato deve ser HH:mm'),
     hour: z.string().optional(),
     data: z.string().optional(),
   }),
 });
-
-const washService = WashService();
 type WashFormData = z.infer<typeof washSchema>;
 
 export default function FormsDialog({
@@ -84,46 +85,44 @@ export default function FormsDialog({
   isOpenState,
   initialData,
 }: FormsDialogProps) {
-  const handleClick = () => {
-    handleIsOpen(!isOpenState);
-  };
-
   const {
-    register,
+    reset,
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
   } = useForm<WashFormData>({
     resolver: zodResolver(washSchema) as any,
-    defaultValues: initialData || defaultWash, // Se existir, preenche os campos automaticamente!
+    defaultValues: initialData || defaultWash,
+  });
+
+  useEffect(() => {
+    if (initialData) {
+      reset(initialData);
+    } else {
+      reset(defaultWash);
+    }
+  }, [initialData, reset]);
+
+  const clearData = () => {
+    initialData = defaultWash;
+  };
+  const handleClick = () => {
+    clearData();
+    handleIsOpen(!isOpenState);
+  };
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: WashService.setTemp,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['washes'] });
+      handleIsOpen(false);
+    },
   });
 
   const onSubmit = async (data: WashFormData) => {
-    const clearData = () => {
-      initialData = defaultWash;
-    };
-
-    try {
-      if (initialData?.id) {
-        console.log('clicked and updated');
-        await washService.update(data);
-        clearData();
-      } else {
-        const date = new Date();
-        data.service.value = Number(data.service.value);
-        data.timestamps.hour = DateFormater(date);
-        data.timestamps.data = new Date().toLocaleDateString();
-        data.timestamps.entry = new Date().toLocaleDateString();
-
-        console.log('clicked in create new ones');
-
-        clearData();
-        await washService.set(data);
-      }
-      handleClick();
-    } catch (error) {
-      console.error('Erro ao salvar:', error);
-    }
+    mutation.mutate(data);
+    clearData();
   };
 
   return (
