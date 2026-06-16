@@ -32,7 +32,6 @@ const defaultWash = {
     color: '',
   },
   service: {
-    type: '',
     value: 0,
     status: '',
     os: '',
@@ -63,7 +62,6 @@ const washSchema = z.object({
   }),
 
   service: z.object({
-    type: z.string().min(1, 'Selecione um tipo'),
     value: z.coerce.number({ error: 'deve ser um numero' }).positive(),
     status: z.string(),
     os: z.string(),
@@ -107,7 +105,7 @@ export default function FormsDialog({
     initialData = defaultWash;
   };
   const handleClick = () => {
-    clearData();
+    reset(defaultWash);
     handleIsOpen(!isOpenState);
   };
 
@@ -142,7 +140,6 @@ export default function FormsDialog({
                   error={!!errors.client?.name}
                   helperText={errors.client?.name?.message}
                   fullWidth
-                  autoFocus
                   required
                   margin="dense"
                   type="text"
@@ -161,7 +158,6 @@ export default function FormsDialog({
                   error={!!errors.client?.phone}
                   helperText={errors.client?.phone?.message}
                   fullWidth
-                  autoFocus
                   required
                   margin="dense"
                   type="text"
@@ -180,7 +176,6 @@ export default function FormsDialog({
                   error={!!errors.client?.address}
                   helperText={errors.client?.address?.message}
                   fullWidth
-                  autoFocus
                   required
                   margin="dense"
                   type="text"
@@ -199,7 +194,6 @@ export default function FormsDialog({
                   error={!!errors.car?.model}
                   helperText={errors.car?.model?.message}
                   fullWidth
-                  autoFocus
                   required
                   margin="dense"
                   type="text"
@@ -218,7 +212,6 @@ export default function FormsDialog({
                   error={!!errors.car?.plate}
                   helperText={errors.car?.plate?.message}
                   fullWidth
-                  autoFocus
                   required
                   margin="dense"
                   type="text"
@@ -237,26 +230,6 @@ export default function FormsDialog({
                   error={!!errors.car?.color}
                   helperText={errors.car?.color?.message}
                   fullWidth
-                  autoFocus
-                  required
-                  margin="dense"
-                  type="text"
-                  variant="standard"
-                />
-              )}
-            />
-
-            <Controller
-              name="service.type"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Tipo"
-                  error={!!errors.service?.type}
-                  helperText={errors.service?.type?.message}
-                  fullWidth
-                  autoFocus
                   required
                   margin="dense"
                   type="text"
@@ -275,29 +248,9 @@ export default function FormsDialog({
                   error={!!errors.service?.value}
                   helperText={errors.service?.value?.message}
                   fullWidth
-                  autoFocus
                   required
                   margin="dense"
                   type="number"
-                  variant="standard"
-                />
-              )}
-            />
-
-            <Controller
-              name="service.status"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Status"
-                  error={!!errors.service?.status}
-                  helperText={errors.service?.status?.message}
-                  fullWidth
-                  autoFocus
-                  required
-                  margin="dense"
-                  type="text"
                   variant="standard"
                 />
               )}
@@ -313,7 +266,6 @@ export default function FormsDialog({
                   error={!!errors.service?.os}
                   helperText={errors.service?.os?.message}
                   fullWidth
-                  autoFocus
                   required
                   margin="dense"
                   type="text"
@@ -332,7 +284,6 @@ export default function FormsDialog({
                   error={!!errors.service?.obs}
                   helperText={errors.service?.obs?.message}
                   fullWidth
-                  autoFocus
                   required
                   margin="dense"
                   type="text"
@@ -351,7 +302,6 @@ export default function FormsDialog({
                   error={!!errors.timestamps?.exit}
                   helperText={errors.timestamps?.exit?.message}
                   fullWidth
-                  autoFocus
                   required
                   margin="dense"
                   type="text"

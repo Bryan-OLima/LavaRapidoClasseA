@@ -1,15 +1,21 @@
 import type { Wash } from '../interfaces/Washes';
 import { DateFormater } from '../utils/dateFormater';
 
+const status = ['Não iniciado', 'Lavando', 'Pronto', 'Entregue'];
+
 export const WashService = {
-  set: async (wash: Wash): Promise<void> => {
-    try {
-      wash.id = `WASH_${crypto.randomUUID()}`;
-      wash.service.status = 'Entregue';
-      localStorage.setItem(wash.id, JSON.stringify(wash));
-    } catch (e) {
-      console.error('Erro ao tentar salvar', e);
-    }
+  setWashAndDeleteTemp: async (tempWashId: string): Promise<void | null> => {
+    const tWashString = localStorage.getItem(tempWashId);
+    if (!tWashString) return null;
+
+    const tWash: Wash = JSON.parse(tWashString) as Wash;
+    let nWash: Wash = tWash;
+    nWash.service.status = status[3];
+    nWash.id = `WASH_${crypto.randomUUID()}`;
+
+    localStorage.setItem(nWash.id, JSON.stringify(nWash));
+
+    localStorage.removeItem(tempWashId);
   },
 
   setTemp: async (wash: Wash): Promise<void> => {
@@ -18,6 +24,7 @@ export const WashService = {
       wash.timestamps.hour = DateFormater(date);
       wash.timestamps.data = new Date().toLocaleDateString();
       wash.timestamps.entry = new Date().toLocaleDateString();
+      wash.service.status = status[0];
       wash.id = `TEMP_${crypto.randomUUID()}`;
 
       localStorage.setItem(wash.id, JSON.stringify(wash));

@@ -13,11 +13,14 @@ interface WashCardProps {
 }
 
 function WashCard({ wash }: WashCardProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const handleIsOpen = () => {
-    setIsOpen(!isOpen);
+  const [isOpenRemove, setIsOpenRemove] = useState(false);
+  const [isOpenConclude, setIsOpenConclude] = useState(false);
+  const handleIsOpenConclude = () => {
+    setIsOpenConclude(!isOpenConclude);
   };
-
+  const handleIsOpenRemove = () => {
+    setIsOpenRemove(!isOpenRemove);
+  };
   const isDelivered = wash.service.status == 'Entregue';
 
   return (
@@ -49,13 +52,14 @@ function WashCard({ wash }: WashCardProps) {
           <button
             className="card-btn btn-rmv"
             onClick={() => {
-              handleIsOpen();
+              setIsOpenRemove(true);
             }}
           >
             REMOVER
           </button>
           <CustomDialog
             id={wash.id}
+            isRemove={true}
             HtmlCodeBlock={
               <>
                 Você tem certeza que quer remover a lavagem do carro{' '}
@@ -63,8 +67,8 @@ function WashCard({ wash }: WashCardProps) {
                 <span className="warn">{wash.client.name}</span>?
               </>
             }
-            handleIsOpen={handleIsOpen}
-            isStateOpen={isOpen}
+            handleIsOpen={handleIsOpenRemove}
+            isStateOpen={isOpenRemove}
             buttons={{
               confirmationButton: { color: '#e2361f', name: 'REMOVER' },
               secundaryButton: { color: '#fff', name: 'CANCELAR' },
@@ -73,8 +77,7 @@ function WashCard({ wash }: WashCardProps) {
           <button
             className="card-btn btn-ok"
             onClick={() => {
-              console.log(wash.timestamps.hour);
-              console.log(wash.timestamps.data);
+              setIsOpenConclude(true);
             }}
           >
             <CheckCircleIcon
@@ -82,6 +85,23 @@ function WashCard({ wash }: WashCardProps) {
             />
             CONCLUIR
           </button>
+          <CustomDialog
+            id={wash.id}
+            isRemove={false}
+            HtmlCodeBlock={
+              <>
+                Você tem certeza que quer concluir a lavagem do carro{' '}
+                <span className="attention">{wash.car.model}</span> do cliente{' '}
+                <span className="attention">{wash.client.name}</span>?
+              </>
+            }
+            handleIsOpen={handleIsOpenConclude}
+            isStateOpen={isOpenConclude}
+            buttons={{
+              confirmationButton: { color: '#f9d406', name: 'CONCLUIR' },
+              secundaryButton: { color: '#fff', name: 'CANCELAR' },
+            }}
+          />
         </div>
       )}
     </div>

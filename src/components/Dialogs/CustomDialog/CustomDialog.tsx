@@ -14,6 +14,7 @@ interface CustomDialogProps {
   };
   isStateOpen: boolean;
   handleIsOpen: (state: boolean) => void;
+  isRemove: boolean;
 }
 
 interface Button {
@@ -27,15 +28,27 @@ function CustomDialog({
   buttons,
   isStateOpen,
   handleIsOpen,
+  isRemove,
 }: CustomDialogProps) {
   const queryClient = useQueryClient();
-  const mutation = useMutation({
-    mutationFn: (id: string) => WashService.delete(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['washes'] });
-      handleIsOpen(!isStateOpen);
-    },
-  });
+  let mutation: any;
+  if (isRemove) {
+    mutation = useMutation({
+      mutationFn: (id: string) => WashService.delete(id),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['washes'] });
+        handleIsOpen(!isStateOpen);
+      },
+    });
+  } else {
+    mutation = useMutation({
+      mutationFn: (id: string) => WashService.setWashAndDeleteTemp(id),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['washes'] });
+        handleIsOpen(!isStateOpen);
+      },
+    });
+  }
 
   return (
     <>
@@ -56,7 +69,11 @@ function CustomDialog({
             className="card-btn"
             style={{ color: buttons.confirmationButton.color, border: 'none' }}
             onClick={() => {
-              mutation.mutate(id);
+              if (isRemove) {
+                return mutation.mutate(id);
+              } else {
+                return mutation.mutate(id);
+              }
             }}
           >
             {buttons.confirmationButton.name}

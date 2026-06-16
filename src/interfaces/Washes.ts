@@ -11,7 +11,6 @@ export interface Wash {
     color?: string;
   };
   service: {
-    type: string; // retirar type
     value: number;
     status: string;
     os: string;
