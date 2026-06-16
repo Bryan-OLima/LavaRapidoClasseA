@@ -343,7 +343,7 @@ export default function FormsDialog({
             <Controller
               name="timestamps.exit"
               control={control}
-              render={({ field }) => (
+              render={({ field: { onChange, value, ...field } }) => (
                 <TextField
                   {...field}
                   label="Saída"
@@ -355,6 +355,17 @@ export default function FormsDialog({
                   margin="dense"
                   type="text"
                   variant="standard"
+                  value={value}
+                  onChange={(e) => {
+                    let val = e.target.value.replace(/\D/g, '');
+                    if (val.length > 4) val = val.slice(0, 4);
+                    if (val.length >= 3) {
+                      onChange(`${val.slice(0, 2)}:${val.slice(2)}`);
+                    } else {
+                      onChange(val);
+                    }
+                  }}
+                  placeholder="HH:mm"
                 />
               )}
             />
