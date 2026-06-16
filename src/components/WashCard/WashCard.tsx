@@ -18,8 +18,10 @@ function WashCard({ wash }: WashCardProps) {
     setIsOpen(!isOpen);
   };
 
+  const isDelivered = wash.service.status == 'Entregue';
+
   return (
-    <div className="card">
+    <div className="card" style={{ height: !isDelivered ? '250px' : '100%' }}>
       <div className="card-info">
         <span className="card-title">{wash.car.model}</span>
         <span className="card-plate"> {wash.car.plate} </span>
@@ -41,44 +43,47 @@ function WashCard({ wash }: WashCardProps) {
         <EditIcon sx={{ fontSize: iconConfiguration.card.textIcon }} /> Notas: "
         {`${wash.service.os}. ${wash.service.obs}`}"
       </div>
-
-      <div className="card-btn-area">
-        <button className="card-btn btn-edt">EDITAR</button>
-        <button
-          className="card-btn btn-rmv"
-          onClick={() => {
-            handleIsOpen();
-          }}
-        >
-          REMOVER
-        </button>
-        <CustomDialog
-          id={wash.id}
-          HtmlCodeBlock={
-            <>
-              Você tem certeza que quer remover a lavagem do carro{' '}
-              <span className="warn">{wash.car.model}</span> do cliente{' '}
-              <span className="warn">{wash.client.name}</span>?
-            </>
-          }
-          handleIsOpen={handleIsOpen}
-          isStateOpen={isOpen}
-          buttons={{
-            confirmationButton: { color: '#e2361f', name: 'REMOVER' },
-            secundaryButton: { color: '#fff', name: 'CANCELAR' },
-          }}
-        />
-        <button
-          className="card-btn btn-ok"
-          onClick={() => {
-            console.log(wash.timestamps.hour);
-            console.log(wash.timestamps.data);
-          }}
-        >
-          <CheckCircleIcon sx={{ fontSize: iconConfiguration.card.fontSize }} />
-          CONCLUIR
-        </button>
-      </div>
+      {!isDelivered && (
+        <div className="card-btn-area">
+          <button className="card-btn btn-edt">EDITAR</button>
+          <button
+            className="card-btn btn-rmv"
+            onClick={() => {
+              handleIsOpen();
+            }}
+          >
+            REMOVER
+          </button>
+          <CustomDialog
+            id={wash.id}
+            HtmlCodeBlock={
+              <>
+                Você tem certeza que quer remover a lavagem do carro{' '}
+                <span className="warn">{wash.car.model}</span> do cliente{' '}
+                <span className="warn">{wash.client.name}</span>?
+              </>
+            }
+            handleIsOpen={handleIsOpen}
+            isStateOpen={isOpen}
+            buttons={{
+              confirmationButton: { color: '#e2361f', name: 'REMOVER' },
+              secundaryButton: { color: '#fff', name: 'CANCELAR' },
+            }}
+          />
+          <button
+            className="card-btn btn-ok"
+            onClick={() => {
+              console.log(wash.timestamps.hour);
+              console.log(wash.timestamps.data);
+            }}
+          >
+            <CheckCircleIcon
+              sx={{ fontSize: iconConfiguration.card.fontSize }}
+            />
+            CONCLUIR
+          </button>
+        </div>
+      )}
     </div>
   );
 }

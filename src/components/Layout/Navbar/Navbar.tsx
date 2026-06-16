@@ -25,10 +25,10 @@ function Navbar() {
 
       <li className="nav-link">
         <Link to="/">
-          <button className="nav-link-btn btn active">
+          <button className="nav-link-btn btn">
             <HomeIcon
               sx={{
-                color: iconConfiguration.navbar.active,
+                color: iconConfiguration.navbar.color,
                 fontSize: iconConfiguration.navbar.fontSize,
               }}
             />

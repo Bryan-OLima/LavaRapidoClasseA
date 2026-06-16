@@ -92,11 +92,11 @@ export default function FormsDialog({
     formState: { errors, isSubmitting },
   } = useForm<WashFormData>({
     resolver: zodResolver(washSchema) as any,
-    defaultValues: initialData || defaultWash,
+    defaultValues: defaultWash,
   });
 
   useEffect(() => {
-    if (initialData) {
+    if (isOpenState) {
       reset(initialData);
     } else {
       reset(defaultWash);
@@ -116,6 +116,7 @@ export default function FormsDialog({
     mutationFn: WashService.setTemp,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['washes'] });
+      reset(defaultWash);
       handleIsOpen(false);
     },
   });

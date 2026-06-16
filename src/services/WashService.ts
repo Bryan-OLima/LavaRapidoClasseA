@@ -4,12 +4,8 @@ import { DateFormater } from '../utils/dateFormater';
 export const WashService = {
   set: async (wash: Wash): Promise<void> => {
     try {
-      const date = new Date();
-      wash.timestamps.hour = DateFormater(date);
-      wash.timestamps.data = new Date().toLocaleDateString();
-      wash.timestamps.entry = new Date().toLocaleDateString();
-
       wash.id = `WASH_${crypto.randomUUID()}`;
+      wash.service.status = 'Entregue';
       localStorage.setItem(wash.id, JSON.stringify(wash));
     } catch (e) {
       console.error('Erro ao tentar salvar', e);
