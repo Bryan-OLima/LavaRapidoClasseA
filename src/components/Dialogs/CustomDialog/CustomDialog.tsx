@@ -4,7 +4,7 @@ import DialogContent from '@mui/material/DialogContent';
 
 import './style.css';
 
-interface ConfirmationDialogProps {
+interface CustomDialogProps {
   id?: string;
   HtmlCodeBlock?: React.ReactNode;
   buttons: {
@@ -20,13 +20,13 @@ interface Button {
   name: string;
 }
 
-function ConfirmationDialog({
+function CustomDialog({
   id,
   HtmlCodeBlock,
   buttons,
   isStateOpen,
   handleIsOpen,
-}: ConfirmationDialogProps) {
+}: CustomDialogProps) {
   return (
     <>
       <Dialog
@@ -66,4 +66,4 @@ function ConfirmationDialog({
   );
 }
 
-export default ConfirmationDialog;
+export default CustomDialog;

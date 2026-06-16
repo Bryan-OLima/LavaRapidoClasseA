@@ -5,23 +5,17 @@ import WatchLaterIcon from '@mui/icons-material/WatchLater';
 
 import './style.css';
 import { useState } from 'react';
-import ConfirmationDialog from '../Dialogs/ConfirmationDialog/ConfirmationDialog';
+import CustomDialog from '../Dialogs/CustomDialog/CustomDialog';
 import type { Wash } from '../../interfaces/Washes';
 import { DateFormater } from '../../utils/dateFormater';
 
 interface WashCardProps {
   wash: Wash;
+  service: any;
 }
 
-function WashCard({ wash }: WashCardProps) {
+function WashCard({ wash, service }: WashCardProps) {
   const [isOpen, setIsOpen] = useState(false);
-
-  const setDataLog: any = () => {
-    const date = new Date();
-    wash.timestamps.hour = DateFormater(date);
-    wash.timestamps.data = new Date().toLocaleDateString();
-  };
-
   const handleIsOpen = () => {
     setIsOpen(!isOpen);
   };
@@ -60,7 +54,7 @@ function WashCard({ wash }: WashCardProps) {
         >
           REMOVER
         </button>
-        <ConfirmationDialog
+        <CustomDialog
           id={wash.id}
           HtmlCodeBlock={
             <>
@@ -79,7 +73,6 @@ function WashCard({ wash }: WashCardProps) {
         <button
           className="card-btn btn-ok"
           onClick={() => {
-            setDataLog();
             console.log(wash.timestamps.hour);
             console.log(wash.timestamps.data);
           }}

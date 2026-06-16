@@ -2,9 +2,16 @@ import type { Wash } from '../interfaces/Washes';
 
 export default function WashService() {
   console.log('local storage service');
-
   return {
     set: (wash: Wash) => {
+      localStorage.setItem(wash.id, JSON.stringify(wash));
+      console.log(wash.timestamps.hour);
+      console.log(wash.timestamps.data);
+
+      console.log('criado');
+    },
+
+    update: (wash: Wash) => {
       localStorage.setItem(wash.id, JSON.stringify(wash));
       console.log('registrado');
     },

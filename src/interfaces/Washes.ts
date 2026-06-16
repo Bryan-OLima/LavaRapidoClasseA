@@ -8,7 +8,7 @@ export interface Wash {
   car: {
     model: string;
     plate: string;
-    color: string;
+    color?: string;
   };
   service: {
     type: string; // retirar type
@@ -18,9 +18,9 @@ export interface Wash {
     obs: string;
   };
   timestamps: {
-    entry: string;
+    entry?: string;
     exit: string;
-    hour: string;
-    data: string;
+    hour?: string;
+    data?: string;
   };
 }
