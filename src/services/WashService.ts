@@ -10,7 +10,7 @@ import {
 import type { Wash } from '../interfaces/Washes';
 import { DateFormater } from '../utils/dateFormater';
 import { db } from '../config/FirebaseConfig';
-import { fireBaseWashConverter } from '../utils/FirebaseWashConverter';
+import { fireBaseWashConverter } from '../utils/firebaseWashConverter';
 
 const status = ['Não iniciado', 'Lavando', 'Pronto', 'Entregue'];
 const structure: Wash = {
