@@ -15,6 +15,7 @@ interface CustomDialogProps {
   isStateOpen: boolean;
   handleIsOpen: (state: boolean) => void;
   isRemove: boolean;
+  collection: any;
 }
 
 interface Button {
@@ -29,12 +30,14 @@ function CustomDialog({
   isStateOpen,
   handleIsOpen,
   isRemove,
+  collection,
 }: CustomDialogProps) {
   const queryClient = useQueryClient();
   let mutation: any;
   if (isRemove) {
     mutation = useMutation({
-      mutationFn: (id: string) => WashService.delete(id),
+      mutationFn: (params: { id: string; collection: string }) =>
+        WashService.delete(params.id, params.collection),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['washes'] });
         handleIsOpen(!isStateOpen);
@@ -70,7 +73,7 @@ function CustomDialog({
             style={{ color: buttons.confirmationButton.color, border: 'none' }}
             onClick={() => {
               if (isRemove) {
-                return mutation.mutate(id);
+                return mutation.mutate({ id, collection });
               } else {
                 return mutation.mutate(id);
               }

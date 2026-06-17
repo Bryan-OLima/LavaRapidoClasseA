@@ -28,7 +28,7 @@ function WashCard({ wash }: WashCardProps) {
     <div className="card" style={{ height: !isDelivered ? '250px' : '100%' }}>
       <div className="card-info">
         <span className="card-title">{wash.car.model}</span>
-        <span className="card-plate"> {wash.car.plate} </span>
+        <span className="card-plate"> {wash.car.plate.toUpperCase()} </span>
       </div>
 
       <span className="card-name">{wash.client.name}</span>
@@ -89,6 +89,7 @@ function WashCard({ wash }: WashCardProps) {
           <CustomDialog
             id={wash.id}
             isRemove={true}
+            collection={wash.service.status == 'Entregue' ? 'Washes' : 'TEMP'}
             HtmlCodeBlock={
               <>
                 Você tem certeza que quer remover a lavagem do carro{' '}
@@ -117,6 +118,7 @@ function WashCard({ wash }: WashCardProps) {
           <CustomDialog
             id={wash.id}
             isRemove={false}
+            collection={wash.service.status == 'Entregue' ? 'Washes' : 'TEMP'}
             HtmlCodeBlock={
               <>
                 Você tem certeza que quer concluir a lavagem do carro{' '}

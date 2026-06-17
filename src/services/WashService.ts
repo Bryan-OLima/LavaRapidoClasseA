@@ -1,21 +1,76 @@
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+} from 'firebase/firestore';
+// import  from '../config/FirebaseConfig';
 import type { Wash } from '../interfaces/Washes';
 import { DateFormater } from '../utils/dateFormater';
+import { db } from '../config/FirebaseConfig';
+import { fireBaseWashConverter } from '../utils/FirebaseWashConverter';
 
 const status = ['Não iniciado', 'Lavando', 'Pronto', 'Entregue'];
-
+const structure: Wash = {
+  id: '',
+  client: {
+    name: '',
+    phone: '',
+    address: '',
+  },
+  car: {
+    model: '',
+    plate: '',
+    color: undefined,
+  },
+  service: {
+    value: 0,
+    status: '',
+    os: '',
+    obs: '',
+  },
+  timestamps: {
+    entry: undefined,
+    exit: '',
+    hour: undefined,
+    data: undefined,
+  },
+};
 export const WashService = {
   setWashAndDeleteTemp: async (tempWashId: string): Promise<void | null> => {
-    const tWashString = localStorage.getItem(tempWashId);
-    if (!tWashString) return null;
+    const docTempRef = doc(db, 'TEMP', tempWashId).withConverter(
+      fireBaseWashConverter
+    );
 
-    const tWash: Wash = JSON.parse(tWashString) as Wash;
-    let nWash: Wash = tWash;
-    nWash.service.status = status[3];
-    nWash.id = `WASH_${crypto.randomUUID()}`;
+    const queryTempSnapshot = getDoc(docTempRef);
 
-    localStorage.setItem(nWash.id, JSON.stringify(nWash));
+    try {
+      let washTemp: Wash | undefined = structure;
 
-    localStorage.removeItem(tempWashId);
+      if ((await queryTempSnapshot).exists()) {
+        const wash: Wash | undefined = (await queryTempSnapshot).data();
+        washTemp = wash;
+      }
+
+      try {
+        const washRef = doc(db, 'Washes', washTemp!.id);
+
+        washTemp!.service.status = 'Entregue';
+        await setDoc(washRef, washTemp);
+
+        try {
+          await deleteDoc(docTempRef);
+        } catch (e) {
+          console.error('Erro ao tentar deletar', e);
+        }
+      } catch (e) {
+        console.error('Erro ao tentar salvar TEMP em Washes', e);
+      }
+    } catch (e) {
+      console.error('Erro ao tentar recuperar dados do card', e);
+    }
   },
 
   setTemp: async (wash: Wash): Promise<void> => {
@@ -25,13 +80,12 @@ export const WashService = {
       wash.timestamps.data = new Date().toLocaleDateString();
       wash.timestamps.entry = new Date().toLocaleDateString();
       wash.service.status = status[0];
-      wash.id = `TEMP_${crypto.randomUUID()}`;
+      wash.id = crypto.randomUUID();
 
-      localStorage.setItem(wash.id, JSON.stringify(wash));
-
-      console.log('criado');
+      const docRef = doc(db, 'TEMP', wash.id);
+      await setDoc(docRef, wash);
     } catch (e) {
-      console.error('Erro ao tentar salvar', e);
+      console.error('Erro ao adicionar uma nova lavagem ao banco', e);
     }
   },
 
@@ -51,51 +105,50 @@ export const WashService = {
     return JSON.parse(washString) as Wash;
   },
 
-  delete: async (id: string): Promise<void> => {
+  delete: async (id: string, collection: string): Promise<void> => {
+    const docRef = doc(db, collection, id);
+
     try {
-      localStorage.removeItem(id);
+      await deleteDoc(docRef);
+      console.log('Deletado com sucesso!');
     } catch (e) {
-      console.log('Erro ao Deletar', e);
+      console.error('Erro ao tentar deletar', e);
     }
   },
 
   getAll: async (): Promise<Wash[]> => {
     const washes: Wash[] = [];
+    try {
+      const washesRef = collection(db, 'Washes').withConverter(
+        fireBaseWashConverter
+      );
+      const querySnapshot = await getDocs(washesRef);
 
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key?.startsWith('WASH_')) {
-        const value = localStorage.getItem(key);
-
-        if (value) {
-          try {
-            washes.push(JSON.parse(value));
-          } catch (e) {
-            console.error('Erro ao ler item do storage', e);
-          }
-        }
-      }
+      querySnapshot.docs.map((doc) => {
+        washes.push(doc.data());
+      });
+    } catch (e) {
+      console.error(e);
     }
+    console.log(washes);
     return washes;
   },
 
   getAllTemp: async (): Promise<Wash[]> => {
     const washes: Wash[] = [];
+    try {
+      const washesRef = collection(db, 'TEMP').withConverter(
+        fireBaseWashConverter
+      );
+      const querySnapshot = await getDocs(washesRef);
 
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key?.startsWith('TEMP_')) {
-        const value = localStorage.getItem(key);
-
-        if (value) {
-          try {
-            washes.push(JSON.parse(value));
-          } catch (e) {
-            console.error('Erro ao ler item do storage', e);
-          }
-        }
-      }
+      querySnapshot.docs.map((doc) => {
+        washes.push(doc.data());
+      });
+    } catch (e) {
+      console.error(e);
     }
+    console.log(washes);
     return washes;
   },
 };
