@@ -47,7 +47,7 @@ function WashCard({ wash }: WashCardProps) {
             <WatchLaterIcon
               sx={{ fontSize: iconConfiguration.card.textIcon }}
             />{' '}
-            Entrada: {wash.timestamps.entry}
+            Entrada: {wash.timestamps.hour}
           </span>
         )}
         <span
